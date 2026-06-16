@@ -26,7 +26,7 @@
 
 ## 🌍 Project Overview
 
-The **Carbon Footprint Awareness Platform** is an AI-powered sustainability solution designed to empower individuals to understand, measure, and reduce their environmental impact. By leveraging advanced carbon footprint analysis, real-time emissions tracking, and AI-driven sustainability recommendations, this platform enables users to make informed decisions about their daily activities and contribute to a more sustainable future.
+The **Carbon Footprint Awareness Platform** is an AI-powered sustainability solution designed to empower individuals to understand, measure, and reduce their environmental impact. By leveraging advanced AI technologies and comprehensive analytics, we help users make informed decisions about their environmental footprint.
 
 ### Key Highlights
 
@@ -43,7 +43,7 @@ The **Carbon Footprint Awareness Platform** is an AI-powered sustainability solu
 
 ## 🎯 Problem Statement
 
-Many individuals are unaware of how their daily activities contribute to carbon emissions and lack actionable insights to reduce their environmental footprint. This creates a gap between environmental awareness and sustainable behavior change.
+Many individuals are unaware of how their daily activities contribute to carbon emissions and lack actionable insights to reduce their environmental footprint. This creates a gap between environmental awareness and sustainable action.
 
 ### The Challenge
 
@@ -200,35 +200,14 @@ Measure environmental impact of waste generation:
 
 The platform is comprehensively tested to ensure reliability and accuracy:
 
-### Carbon Calculation Testing
-- ✅ Monthly CO₂ estimation accuracy
-- ✅ Annual projection calculations
-- ✅ Sustainability score computation
-- ✅ Edge case handling
+## Testing
 
-### Emissions Analysis Testing
-- ✅ Transport mode calculations (car, bus, train, flight, metro)
-- ✅ Distance-based emission formulas
-- ✅ Multi-modal journey tracking
-- ✅ Data accuracy validation
-
-### Dashboard Testing
-- ✅ Data visualization rendering
-- ✅ Real-time chart updates
-- ✅ Interactive component functionality
-- ✅ Data filtering and sorting
-
-### Report Generation Testing
-- ✅ PDF export functionality
-- ✅ Report formatting and layout
-- ✅ Data accuracy in reports
-- ✅ File download mechanisms
-
-### Mobile Responsiveness Testing
-- ✅ Responsive design on all screen sizes
-- ✅ Touch interaction compatibility
-- ✅ Performance on mobile devices
-- ✅ Image and asset optimization
+- Unit Testing
+- Carbon Calculation Validation
+- Emission Analysis Testing
+- Dashboard Rendering Tests
+- Report Generation Validation
+- Mobile Responsiveness Testing
 
 ## ♿ Accessibility
 
@@ -398,6 +377,7 @@ Contributions are welcome! Please follow these steps:
 - **Organization**: Royal Bulls Advisory Pvt. Ltd.
 - **GitHub**: [@Royalbulls](https://github.com/Royalbulls)
 - **LinkedIn**: https://www.linkedin.com/in/krishna-vishwakarma-6561582b6
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
