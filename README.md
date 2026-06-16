@@ -38,7 +38,7 @@ The **Carbon Footprint Awareness Platform** is an AI-powered sustainability solu
 
 ### Links
 
-- **📱 Live Demo**: [Carbon Footprint Platform](https://example.com) *(Update with your live URL)*
+- **📱 Live Demo**: [Carbon Footprint Platform](https://carbon-footprint-awareness-platform-326440519773.asia-east1.run.app) *(Update with your live URL)*
 - **📚 Repository**: [GitHub - Carbon-Footprint-Awareness-Platform](https://github.com/Royalbulls/Carbon-Footprint-Awareness-Platform)
 
 ## 🎯 Problem Statement
@@ -397,7 +397,7 @@ Contributions are welcome! Please follow these steps:
 - **Position**: Founder & CEO
 - **Organization**: Royal Bulls Advisory Pvt. Ltd.
 - **GitHub**: [@Royalbulls](https://github.com/Royalbulls)
-
+- **LinkedIn**: https://www.linkedin.com/in/krishna-vishwakarma-6561582b6
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
