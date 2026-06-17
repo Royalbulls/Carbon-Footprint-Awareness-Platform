@@ -32,15 +32,78 @@ function getGeminiClient(): GoogleGenAI {
   return aiClient;
 }
 
-// 1. AI Sustainability Advisor Route
+// In-memory rate limiting map: IP address -> timestamp[]
+const requestLimitWindowMs = 60 * 1000; // 1 minute window
+const maxRequestsPerWindow = 6;         // 6 requests maximum per minute
+const ipRequestHistory = new Map<string, number[]>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = ipRequestHistory.get(ip) || [];
+  const activeTimestamps = timestamps.filter(ts => now - ts < requestLimitWindowMs);
+  
+  if (activeTimestamps.length >= maxRequestsPerWindow) {
+    return false;
+  }
+  
+  activeTimestamps.push(now);
+  ipRequestHistory.set(ip, activeTimestamps);
+  return true;
+}
+
+// 1. AI Sustainability Advisor Route with strict validation and rate limiting
 app.post("/api/advisor", async (req, res) => {
   try {
-    const { profile, results, logs } = req.body;
-
-    if (!results) {
-      res.status(400).json({ error: "No footprint analysis results provided." });
+    // A. Rate Limiting Check
+    const clientIp = req.ip || req.socket.remoteAddress || "127.0.0.1";
+    if (!checkRateLimit(clientIp)) {
+      res.status(429).json({ 
+        error: "Too many requests to the AI advisor. Please limit requests to 6 queries per minute." 
+      });
       return;
     }
+
+    const { profile, results, logs } = req.body;
+
+    // B. Security Validation & XSS Sanitize
+    const sanitizeStr = (val: any): string => {
+      if (typeof val !== "string") return "";
+      return val.replace(/[<>'"&]/g, "").trim().substring(0, 80);
+    };
+
+    if (!profile || typeof profile !== "object") {
+      res.status(400).json({ error: "Invalid profile payload. Profile is required." });
+      return;
+    }
+
+    const sanitizedProfile = {
+      name: sanitizeStr(profile.name) || "User",
+      country: sanitizeStr(profile.country) || "US",
+      householdSize: Math.max(1, Math.min(12, Number(profile.householdSize) || 1)),
+      sustainabilityGoal: ["low", "medium", "aggressive"].includes(profile.sustainabilityGoal)
+        ? profile.sustainabilityGoal
+        : "medium",
+      targetCO2: Math.max(50, Math.min(8000, Number(profile.targetCO2) || 500))
+    };
+
+    if (!results || typeof results !== "object" || !results.categoryBreakdown) {
+      res.status(400).json({ error: "Invalid footprint results dataset. Numbers are required." });
+      return;
+    }
+
+    const sanitizedResults = {
+      monthlyCO2: Math.max(0, Math.min(80000, Number(results.monthlyCO2) || 0)),
+      yearlyCO2: Math.max(0, Math.min(960000, Number(results.yearlyCO2) || 0)),
+      sustainabilityScore: Math.max(0, Math.min(100, Number(results.sustainabilityScore) || 50)),
+      diversionRate: Math.max(0, Math.min(100, Number(results.diversionRate) || 0)),
+      categoryBreakdown: {
+        electricity: Math.max(0, Math.min(15000, Number(results.categoryBreakdown.electricity) || 0)),
+        transport: Math.max(0, Math.min(15000, Number(results.categoryBreakdown.transport) || 0)),
+        waste: Math.max(0, Math.min(15000, Number(results.categoryBreakdown.waste) || 0)),
+        water: Math.max(0, Math.min(15000, Number(results.categoryBreakdown.water) || 0)),
+        flights: Math.max(0, Math.min(80000, Number(results.categoryBreakdown.flights) || 0))
+      }
+    };
 
     const ai = getGeminiClient();
 
@@ -50,28 +113,28 @@ Analyze the following user profile and carbon footprint calculation details:
 
 ---
 User Profile:
-- Name: ${profile?.name || "User"}
-- Country: ${profile?.country || "Worldwide"}
-- Household Size: ${profile?.householdSize || 1} person(s)
-- Sustainability Target Speed/Goal: ${profile?.sustainabilityGoal || "medium"} (Monthly Target: ${profile?.targetCO2 || 500} kg CO2)
+- Name: ${sanitizedProfile.name}
+- Country: ${sanitizedProfile.country}
+- Household Size: ${sanitizedProfile.householdSize} person(s)
+- Sustainability Target Speed/Goal: ${sanitizedProfile.sustainabilityGoal} (Monthly Target: ${sanitizedProfile.targetCO2} kg CO2)
 
 ---
 Carbon Footprint Measurement results (Values in kg CO2/month):
-- Total Monthly CO2: ${results.monthlyCO2} kg
-- Annual Projected Footprint: ${results.yearlyCO2} kg
-- Sustainability Score (0-100 where higher is cleaner): ${results.sustainabilityScore}
-- Waste Diversion Rate: ${results.diversionRate}%
+- Total Monthly CO2: ${sanitizedResults.monthlyCO2} kg
+- Annual Projected Footprint: ${sanitizedResults.yearlyCO2} kg
+- Sustainability Score (0-100 where higher is cleaner): ${sanitizedResults.sustainabilityScore}
+- Waste Diversion Rate: ${sanitizedResults.diversionRate}%
 - Category Breakdown:
-  - Electricity Consumption: ${results.categoryBreakdown?.electricity || 0} kg
-  - Transport Commuting: ${results.categoryBreakdown?.transport || 0} kg
-  - Household Waste: ${results.categoryBreakdown?.waste || 0} kg
-  - Water Consumption: ${results.categoryBreakdown?.water || 0} kg
-  - Flights & Air travel: ${results.categoryBreakdown?.flights || 0} kg
+  - Electricity Consumption: ${sanitizedResults.categoryBreakdown.electricity} kg
+  - Transport Commuting: ${sanitizedResults.categoryBreakdown.transport} kg
+  - Household Waste: ${sanitizedResults.categoryBreakdown.waste} kg
+  - Water Consumption: ${sanitizedResults.categoryBreakdown.water} kg
+  - Flights & Air travel: ${sanitizedResults.categoryBreakdown.flights} kg
 
 ---
 Historical records:
-${logs && logs.length > 0 
-  ? logs.map((l: any) => `- Month: ${l.month}, CO2: ${l.results?.monthlyCO2} kg`).join("\n")
+${Array.isArray(logs) && logs.length > 0 
+  ? logs.slice(0, 6).map((l: any) => `- Month: ${sanitizeStr(l.month)}, CO2: ${Math.max(0, Number(l.results?.monthlyCO2) || 0)} kg`).join("\n")
   : "No older records available. This is the first month."
 }
 

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { UserProfile, CalculationLog, CarbonResult } from "./types";
 import { calculateFootprint } from "./utils";
-import UserProfileForm from "./components/UserProfileForm";
 import CalculatorTab from "./components/CalculatorTab";
 import ProgressDashboard from "./components/ProgressDashboard";
-import AiAdvisorTab from "./components/AiAdvisorTab";
-import ReportsTab from "./components/ReportsTab";
-import EducationalCenter from "./components/EducationalCenter";
+
+const UserProfileForm = lazy(() => import("./components/UserProfileForm"));
+const AiAdvisorTab = lazy(() => import("./components/AiAdvisorTab"));
+const ReportsTab = lazy(() => import("./components/ReportsTab"));
+const EducationalCenter = lazy(() => import("./components/EducationalCenter"));
 import { 
   Leaf, 
   LayoutDashboard, 
@@ -148,6 +149,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f8faf9] flex flex-col font-sans transition-all selection:bg-emerald-200">
       
+      {/* Skip to Content Link for WCAG Accessibility */}
+      <a 
+        href="#main-content-landmark" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-emerald-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md z-50 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 select-none"
+      >
+        Skip to main content
+      </a>
+
       {/* 1. TOP INTERACTIVE BRAND NAVBAR */}
       <header className="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -262,56 +271,63 @@ export default function App() {
       </nav>
 
       {/* 3. CORE ROUTING RENDERING WINDOW */}
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        {activeTab === "dashboard" && (
-          <ProgressDashboard 
-            profile={profile} 
-            latestResults={latestResults} 
-            logs={logs} 
-            onNavigateToTab={(tab) => setActiveTab(tab)} 
-          />
-        )}
+      <main id="main-content-landmark" tabIndex={-1} className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full focus:outline-none">
+        <Suspense fallback={
+          <div className="flex flex-col items-center justify-center py-24 text-slate-500 gap-3" aria-live="polite">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-emerald-850 border-t-transparent animate-spin-slow" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Loading module files...</span>
+          </div>
+        }>
+          {activeTab === "dashboard" && (
+            <ProgressDashboard 
+              profile={profile} 
+              latestResults={latestResults} 
+              logs={logs} 
+              onNavigateToTab={(tab) => setActiveTab(tab)} 
+            />
+          )}
 
-        {activeTab === "calculator" && (
-          <CalculatorTab 
-            onCalculate={handleLogCalculation}
-            initialElectricity={logs.length > 0 ? logs[logs.length-1].electricity : undefined}
-            initialTransport={logs.length > 0 ? logs[logs.length-1].transport : undefined}
-            initialWaste={logs.length > 0 ? logs[logs.length-1].waste : undefined}
-            initialWater={logs.length > 0 ? logs[logs.length-1].water : undefined}
-            initialFlights={logs.length > 0 ? logs[logs.length-1].flights : undefined}
-          />
-        )}
+          {activeTab === "calculator" && (
+            <CalculatorTab 
+              onCalculate={handleLogCalculation}
+              initialElectricity={logs.length > 0 ? logs[logs.length-1].electricity : undefined}
+              initialTransport={logs.length > 0 ? logs[logs.length-1].transport : undefined}
+              initialWaste={logs.length > 0 ? logs[logs.length-1].waste : undefined}
+              initialWater={logs.length > 0 ? logs[logs.length-1].water : undefined}
+              initialFlights={logs.length > 0 ? logs[logs.length-1].flights : undefined}
+            />
+          )}
 
-        {activeTab === "advisor" && (
-          <AiAdvisorTab 
-            profile={profile} 
-            results={latestResults} 
-            logs={logs} 
-          />
-        )}
+          {activeTab === "advisor" && (
+            <AiAdvisorTab 
+              profile={profile} 
+              results={latestResults} 
+              logs={logs} 
+            />
+          )}
 
-        {activeTab === "reports" && (
-          <ReportsTab 
-            profile={profile} 
-            results={latestResults} 
-            logs={logs} 
-          />
-        )}
+          {activeTab === "reports" && (
+            <ReportsTab 
+              profile={profile} 
+              results={latestResults} 
+              logs={logs} 
+            />
+          )}
 
-        {activeTab === "education" && (
-          <EducationalCenter />
-        )}
+          {activeTab === "education" && (
+            <EducationalCenter />
+          )}
 
-        {activeTab === "profile" && (
-          <UserProfileForm 
-            profile={profile} 
-            onChange={(updated) => {
-              setProfile(updated);
-              setActiveTab("dashboard");
-            }} 
-          />
-        )}
+          {activeTab === "profile" && (
+            <UserProfileForm 
+              profile={profile} 
+              onChange={(updated) => {
+                setProfile(updated);
+                setActiveTab("dashboard");
+              }} 
+            />
+          )}
+        </Suspense>
       </main>
 
       {/* 4. ACCESSIBLE BOTTOM FOOTER */}

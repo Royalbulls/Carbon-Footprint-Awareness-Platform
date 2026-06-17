@@ -120,115 +120,124 @@ export default function ProgressDashboard({
       {/* 1. KEY KPI CARD SECTION */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {/* SCORE CARD */}
-        <div id="kpi-sustainability-score" className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+        <div id="kpi-sustainability-score" className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between" role="group" aria-labelledby="kpi-score-title">
           <div className="flex justify-between items-start">
             <div>
-              <span className="text-slate-400 text-xs font-bold uppercase block tracking-wider">Carbon Score</span>
+              <span id="kpi-score-title" className="text-slate-600 text-xs font-bold uppercase block tracking-wider">Carbon Score</span>
               <span className="text-3xl font-extrabold text-slate-900 font-mono mt-1 block">{results.sustainabilityScore}/100</span>
             </div>
             <span className={`text-xxs font-extrabold px-2.5 py-1 rounded-full border ${ratingDetails.pyColor}`}>
               Score
             </span>
           </div>
-          <div className="border-t border-slate-50 pt-3 mt-4">
-            <p className="text-slate-500 text-xs leading-normal">
+          <div className="border-t border-slate-100 pt-3 mt-4">
+            <p className="text-slate-600 text-xs leading-normal">
               Based on global carbon averages. Keep monthly habits under 350 kg CO₂ to maximize score.
             </p>
           </div>
         </div>
 
         {/* CURRENT MONTHLY CO2 */}
-        <div id="kpi-monthly-emissions" className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+        <div id="kpi-monthly-emissions" className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between" role="group" aria-labelledby="kpi-monthly-title">
           <div className="flex justify-between items-start">
             <div>
-              <span className="text-slate-400 text-xs font-bold uppercase block tracking-wider">Current Monthly CO₂</span>
-              <span className="text-3xl font-extrabold text-slate-900 font-mono mt-1 block">{currentCO2} <span className="text-xs font-bold text-slate-400">kg</span></span>
+              <span id="kpi-monthly-title" className="text-slate-600 text-xs font-bold uppercase block tracking-wider">Current Monthly CO₂</span>
+              <span className="text-3xl font-extrabold text-slate-900 font-mono mt-1 block">{currentCO2} <span className="text-xs font-bold text-slate-500">kg</span></span>
             </div>
-            <div className="p-2 rounded-xl bg-orange-50 text-orange-600">
+            <div className="p-2 rounded-xl bg-orange-50 text-orange-700" aria-hidden="true">
               <Activity size={18} />
             </div>
           </div>
-          <div className="border-t border-slate-50 pt-3 mt-4 flex items-center justify-between text-xs text-slate-500">
+          <div className="border-t border-slate-100 pt-3 mt-4 flex items-center justify-between text-xs text-slate-600">
             <span>Annual projection:</span>
             <span className="font-mono font-bold text-slate-800">{(results.yearlyCO2 / 1000).toFixed(1)} tons / yr</span>
           </div>
         </div>
 
         {/* REDUCTION GOAL METRIC */}
-        <div id="kpi-reduction-achieved" className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+        <div id="kpi-reduction-achieved" className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between" role="group" aria-labelledby="kpi-reduction-title">
           <div className="flex justify-between items-start">
             <div>
-              <span className="text-slate-400 text-xs font-bold uppercase block tracking-wider">Goal Reduction</span>
-              <span className={`text-3xl font-extrabold font-mono mt-1 block ${reductionAchieved >= 0 ? "text-emerald-700" : "text-rose-600"}`}>
+              <span id="kpi-reduction-title" className="text-slate-600 text-xs font-bold uppercase block tracking-wider">Goal Reduction</span>
+              <span className={`text-3xl font-extrabold font-mono mt-1 block ${reductionAchieved >= 0 ? "text-emerald-800" : "text-rose-700"}`}>
                 {reductionAchieved >= 0 ? `+${reductionAchieved}%` : `${reductionAchieved}%`}
               </span>
             </div>
-            <div className={`p-2 rounded-xl ${reductionAchieved >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-600"}`}>
+            <div className={`p-2 rounded-xl ${reductionAchieved >= 0 ? "bg-emerald-50 text-emerald-800" : "bg-rose-50 text-rose-700"}`} aria-hidden="true">
               <Target size={18} />
             </div>
           </div>
-          <div className="border-t border-slate-50 pt-3 mt-4 text-xs text-slate-500">
+          <div className="border-t border-slate-100 pt-3 mt-4 text-xs text-slate-600">
             {reductionAchieved >= 0 ? (
-              <p className="flex items-center gap-1 text-emerald-700 font-medium">
-                <CheckCircle size={13} /> Slicing target by {reductionValue.toFixed(0)} kg CO₂!
+              <p className="flex items-center gap-1 text-emerald-800 font-bold">
+                <CheckCircle size={13} aria-hidden="true" /> Slicing target by {reductionValue.toFixed(0)} kg CO₂!
               </p>
             ) : (
-              <p className="flex items-center gap-1 text-rose-600 font-medium">
-                <ShieldAlert size={13} /> {Math.abs(reductionValue).toFixed(0)} kg CO₂ over target
+              <p className="flex items-center gap-1 text-rose-700 font-bold">
+                <ShieldAlert size={13} aria-hidden="true" /> {Math.abs(reductionValue).toFixed(0)} kg CO₂ over target
               </p>
             )}
           </div>
         </div>
 
         {/* PROJECTED ANNUAL SAVINGS */}
-        <div id="kpi-projected-savings" className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+        <div id="kpi-projected-savings" className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between" role="group" aria-labelledby="kpi-savings-title">
           <div className="flex justify-between items-start">
             <div>
-              <span className="text-slate-400 text-xs font-bold uppercase block tracking-wider">Projected Savings</span>
-              <span className="text-3xl font-extrabold text-emerald-800 font-mono mt-1 block">~{totalAnnualSavingsTons} <span className="text-xs font-bold text-slate-400">Tons</span></span>
+              <span id="kpi-savings-title" className="text-slate-600 text-xs font-bold uppercase block tracking-wider">Projected Savings</span>
+              <span className="text-3xl font-extrabold text-emerald-800 font-mono mt-1 block">~{totalAnnualSavingsTons} <span className="text-xs font-bold text-slate-500">Tons</span></span>
             </div>
-            <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
+            <div className="p-2 rounded-xl bg-emerald-50 text-emerald-800" aria-hidden="true">
               <Sparkles size={18} />
             </div>
           </div>
-          <div className="border-t border-slate-50 pt-3 mt-4 text-xs text-slate-500 flex items-center justify-between">
+          <div className="border-t border-slate-100 pt-3 mt-4 text-xs text-slate-600 flex items-center justify-between">
             <span>By implementing proposed list:</span>
-            <span className="font-mono font-bold text-emerald-700">{totalAnnualSavingsKg} kg/yr</span>
+            <span className="font-mono font-bold text-emerald-800">{totalAnnualSavingsKg} kg/yr</span>
           </div>
         </div>
       </div>
 
       {/* 2. MAIN REDUCTION GOAL TRACKER WIDGET */}
-      <div className="bg-gradient-to-r from-emerald-900 to-emerald-950 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+      <section aria-label="Carbon Goal Tracker Detail" className="bg-gradient-to-r from-emerald-900 to-emerald-950 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
           <div className="space-y-1">
             <span className="text-emerald-300 text-xxs font-bold uppercase tracking-widest">Active Reduction</span>
             <h3 className="text-xl font-bold font-sans">Carbon Goal Tracker ({profile.sustainabilityGoal.toUpperCase()})</h3>
-            <p className="text-emerald-100/70 text-xs max-w-sm">Comparing current utility habits against the custom target parameters defined in your profile configuration.</p>
+            <p className="text-emerald-100/90 text-xs max-w-sm">Comparing current utility habits against the custom target parameters defined in your profile configuration.</p>
           </div>
 
-          {/* Goal visual bar scale */}
+          {/* Goal visual bar scale with proper ARIA attributes */}
           <div className="md:col-span-2 space-y-2">
             <div className="flex justify-between text-xs text-emerald-200">
-              <span className="font-medium">Current Monthly habit: <strong className="font-mono text-white text-sm">{currentCO2} kg</strong></span>
-              <span className="font-medium">Monthly Threshold Target: <strong className="font-mono text-white text-sm">{targetCO2} kg</strong></span>
+              <span className="font-bold">Current Monthly habit: <strong className="font-mono text-white text-sm">{currentCO2} kg</strong></span>
+              <span className="font-bold">Monthly Threshold Target: <strong className="font-mono text-white text-sm">{targetCO2} kg</strong></span>
             </div>
+            
             {/* ProgressBar */}
-            <div className="h-4 w-full bg-emerald-850 rounded-full border border-emerald-800/50 p-0.5 overflow-hidden">
+            <div 
+              role="progressbar"
+              aria-valuenow={currentCO2}
+              aria-valuemin={0}
+              aria-valuemax={Math.round(targetCO2 * 1.5)}
+              aria-label={`Carbon saving progress. Current footprint is ${currentCO2} kilograms, goal cap is ${targetCO2} kilograms.`}
+              className="h-4 w-full bg-emerald-950 rounded-full border border-emerald-800/80 p-0.5 overflow-hidden"
+            >
               <div 
                 className={`h-full rounded-full transition-all duration-500 ${currentCO2 <= targetCO2 ? "bg-emerald-400" : "bg-amber-400"}`}
                 style={{ width: `${Math.min(100, (currentCO2 / Math.max(1, targetCO2)) * 100)}%` }}
               />
             </div>
+            
             {/* Status explanation line */}
-            <div className="flex justify-between items-center text-xxs text-emerald-100/60 font-mono pt-1">
+            <div className="flex justify-between items-center text-xxs text-emerald-200 font-mono pt-1">
               <span>0 kg</span>
-              <span className="text-white font-bold">{currentCO2 <= targetCO2 ? "Good Pacing! Target Fulfilled" : "Target Exceeded! Action Recommended"}</span>
+              <span className="text-white font-bold">{currentCO2 <= targetCO2 ? "✓ Good Pacing! Target Fulfilled" : "⚠ Target Exceeded! Action Recommended"}</span>
               <span>{(targetCO2 * 1.5).toFixed(0)} kg max</span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* 3. CHART GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
