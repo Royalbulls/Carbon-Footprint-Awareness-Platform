@@ -62,28 +62,31 @@ export default function UserProfileForm({ profile, onChange }: UserProfileFormPr
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name Input */}
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 focus:outline-none">
-              <User size={13} className="text-emerald-700" /> Full Name / Alias
+            <label htmlFor="profile-name-input" className="text-xs font-bold text-slate-750 uppercase tracking-wider flex items-center gap-1.5">
+              <User size={13} className="text-emerald-700" aria-hidden="true" /> Full Name / Alias
             </label>
             <input
               id="profile-name-input"
               type="text"
               required
-              className="w-full text-sm border border-slate-200 outline-none rounded-lg py-2.5 px-3 focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition"
+              aria-describedby="profile-name-desc"
+              className="w-full text-sm border border-slate-300 bg-white outline-none rounded-lg py-2.5 px-3 focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition"
               placeholder="e.g. Robin Green"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            <p id="profile-name-desc" className="text-slate-550 text-xs mt-1">Customizes display greetings throughout the platform interface.</p>
           </div>
 
           {/* Country Selection */}
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 outline-none">
-              <Globe size={13} className="text-emerald-700" /> Primary Country of Residence
+            <label htmlFor="profile-country-select" className="text-xs font-bold text-slate-750 uppercase tracking-wider flex items-center gap-1.5">
+              <Globe size={13} className="text-emerald-700" aria-hidden="true" /> Primary Country of Residence
             </label>
             <select
               id="profile-country-select"
-              className="w-full text-sm border border-slate-200 outline-none rounded-lg py-2.5 px-3 focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition"
+              aria-describedby="profile-country-desc"
+              className="w-full text-sm border border-slate-300 bg-white outline-none rounded-lg py-2.5 px-3 focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
             >
@@ -93,12 +96,13 @@ export default function UserProfileForm({ profile, onChange }: UserProfileFormPr
                 </option>
               ))}
             </select>
+            <p id="profile-country-desc" className="text-slate-550 text-xs mt-1">Configures carbon emission coefficient factors for your territory.</p>
           </div>
 
           {/* Household size */}
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 outline-none">
-              <Users size={13} className="text-emerald-700" /> Household Cohabitants ({householdSize})
+            <label htmlFor="profile-household-range" className="text-xs font-bold text-slate-750 uppercase tracking-wider flex items-center gap-1.5">
+              <Users size={13} className="text-emerald-700" aria-hidden="true" /> Household Cohabitants
             </label>
             <div className="flex items-center gap-4 py-2">
               <input
@@ -107,21 +111,27 @@ export default function UserProfileForm({ profile, onChange }: UserProfileFormPr
                 min="1"
                 max="10"
                 step="1"
-                className="w-full accent-emerald-700 cursor-pointer"
+                aria-describedby="profile-household-desc"
+                aria-label="Household size cohabitants slider"
+                aria-valuemin={1}
+                aria-valuemax={10}
+                aria-valuenow={householdSize}
+                aria-valuetext={householdSize === 1 ? "1 person (Single)" : `${householdSize} persons`}
+                className="w-full h-2 accent-emerald-800 bg-slate-200 rounded-lg appearance-none cursor-pointer focus:ring-2 focus:ring-emerald-700 focus:outline-none"
                 value={householdSize}
                 onChange={(e) => setHouseholdSize(Number(e.target.value))}
               />
-              <span className="text-sm font-semibold bg-slate-100 rounded-md px-3 py-1 outline-none">
+              <span className="text-sm font-bold bg-slate-100 rounded-md px-3 py-1 text-slate-800 whitespace-nowrap">
                 {householdSize === 1 ? "1 (Single)" : `${householdSize} persons`}
               </span>
             </div>
-            <p className="text-slate-400 text-xs text-left">We share electricity, heating, and landfill burdens across the entire household size.</p>
+            <p id="profile-household-desc" className="text-slate-550 text-xs text-left">We share electricity, heating, and landfill burdens across the entire household size.</p>
           </div>
 
           {/* Target custom Monthly emissions */}
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 outline-none">
-              <Target size={13} className="text-emerald-700" /> Custom Monthly Target CO₂ (kg)
+            <label htmlFor="profile-target-input" className="text-xs font-bold text-slate-750 uppercase tracking-wider flex items-center gap-1.5">
+              <Target size={13} className="text-emerald-700" aria-hidden="true" /> Custom Monthly Target CO₂ (kg)
             </label>
             <div className="relative">
               <input
@@ -129,38 +139,41 @@ export default function UserProfileForm({ profile, onChange }: UserProfileFormPr
                 type="number"
                 min="50"
                 max="5000"
-                className="w-full text-sm border border-slate-200 outline-none rounded-lg py-2.5 pl-3 pr-16 focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition font-mono font-medium"
+                aria-describedby="profile-target-desc"
+                className="w-full text-sm border border-slate-300 bg-white outline-none rounded-lg py-2.5 pl-3 pr-16 focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition font-mono font-medium"
                 value={targetCO2}
                 onChange={(e) => setTargetCO2(Number(e.target.value))}
               />
-              <span className="absolute right-3 top-2.5 text-slate-400 text-xs font-mono select-none">kg CO2</span>
+              <span className="absolute right-3 top-2.5 text-slate-600 text-xs font-mono select-none">kg CO2</span>
             </div>
-            <p className="text-slate-400 text-xs">Standard threshold used in progress trackers and goal-attainment forecasts.</p>
+            <p id="profile-target-desc" className="text-slate-550 text-xs">Standard threshold used in progress trackers and goal-attainment forecasts.</p>
           </div>
         </div>
 
         {/* Sustainability Goal Selector Buttons */}
         <div className="space-y-2 mt-2">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block outline-none">
+          <label className="text-xs font-bold text-slate-750 uppercase tracking-wider block">
             Carbon Reduction Rigor / Pace
           </label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4" role="group" aria-label="Reduction pace selector">
             {/* Low Goal */}
             <button
               id="goal-btn-low"
               type="button"
               onClick={() => handleGoalChange("low")}
-              className={`text-left p-4 rounded-xl border text-sm transition focus:ring-2 focus:ring-emerald-700 ${
+              aria-pressed={sustainabilityGoal === "low"}
+              aria-label="Set sustainability goal to Low Reduction, drops baseline by 1 percent monthly"
+              className={`text-left p-4 rounded-xl border text-sm transition focus:ring-2 focus:ring-emerald-700 outline-none cursor-pointer ${
                 sustainabilityGoal === "low"
-                  ? "border-emerald-700 bg-emerald-50/50 text-slate-900 ring-1 ring-emerald-700"
-                  : "border-slate-200 hover:border-slate-300 text-slate-600 bg-white"
+                  ? "border-emerald-850 bg-emerald-50/70 text-slate-900 ring-2 ring-emerald-800"
+                  : "border-slate-300 hover:border-slate-400 text-slate-700 bg-white"
               }`}
             >
-              <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
+              <div className="font-bold text-emerald-900 flex items-center gap-1.5">
                 Low Reduction
-                {sustainabilityGoal === "low" && <Check size={14} />}
+                {sustainabilityGoal === "low" && <Check size={14} aria-hidden="true" />}
               </div>
-              <p className="text-slate-500 text-xs mt-1">Easiest pacing. Drops baseline by 1% monthly. Focuses on simple, zero-cost adjustments.</p>
+              <p className="text-slate-650 text-xs mt-1">Easiest pacing. Drops baseline by 1% monthly. Focuses on simple, zero-cost adjustments.</p>
             </button>
 
             {/* Medium Goal */}
@@ -168,17 +181,19 @@ export default function UserProfileForm({ profile, onChange }: UserProfileFormPr
               id="goal-btn-medium"
               type="button"
               onClick={() => handleGoalChange("medium")}
-              className={`text-left p-4 rounded-xl border text-sm transition focus:ring-2 focus:ring-emerald-700 ${
+              aria-pressed={sustainabilityGoal === "medium"}
+              aria-label="Set sustainability goal to Moderate Reduction, drops baseline by 2.5 percent monthly"
+              className={`text-left p-4 rounded-xl border text-sm transition focus:ring-2 focus:ring-emerald-700 outline-none cursor-pointer ${
                 sustainabilityGoal === "medium"
-                  ? "border-emerald-700 bg-emerald-50/50 text-slate-900 ring-1 ring-emerald-700"
-                  : "border-slate-200 hover:border-slate-300 text-slate-600 bg-white"
+                  ? "border-emerald-850 bg-emerald-50/70 text-slate-900 ring-2 ring-emerald-800"
+                  : "border-slate-300 hover:border-slate-400 text-slate-700 bg-white"
               }`}
             >
-              <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
+              <div className="font-bold text-emerald-900 flex items-center gap-1.5">
                 Moderate reduction
-                {sustainabilityGoal === "medium" && <Check size={14} />}
+                {sustainabilityGoal === "medium" && <Check size={14} aria-hidden="true" />}
               </div>
-              <p className="text-slate-500 text-xs mt-1">Standard target. Reduces baseline footprint by 2.5% monthly. Pragmatic balanced actions.</p>
+              <p className="text-slate-655 text-xs mt-1">Standard target. Reduces baseline footprint by 2.5% monthly. Pragmatic balanced actions.</p>
             </button>
 
             {/* Aggressive Goal */}
@@ -186,32 +201,35 @@ export default function UserProfileForm({ profile, onChange }: UserProfileFormPr
               id="goal-btn-aggressive"
               type="button"
               onClick={() => handleGoalChange("aggressive")}
-              className={`text-left p-4 rounded-xl border text-sm transition focus:ring-2 focus:ring-emerald-700 ${
+              aria-pressed={sustainabilityGoal === "aggressive"}
+              aria-label="Set sustainability goal to Aggressive, drops baseline by 4 percent monthly and targets Net Zero"
+              className={`text-left p-4 rounded-xl border text-sm transition focus:ring-2 focus:ring-emerald-700 outline-none cursor-pointer ${
                 sustainabilityGoal === "aggressive"
-                  ? "border-emerald-700 bg-emerald-50/50 text-slate-900 ring-1 ring-emerald-700"
-                  : "border-slate-200 hover:border-slate-300 text-slate-600 bg-white"
+                  ? "border-emerald-850 bg-emerald-50/70 text-slate-900 ring-2 ring-emerald-800"
+                  : "border-slate-300 hover:border-slate-400 text-slate-700 bg-white"
               }`}
             >
-              <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
+              <div className="font-bold text-emerald-900 flex items-center gap-1.5">
                 Aggressive (Net-Zero Leader)
-                {sustainabilityGoal === "aggressive" && <Check size={14} />}
+                {sustainabilityGoal === "aggressive" && <Check size={14} aria-hidden="true" />}
               </div>
-              <p className="text-slate-500 text-xs mt-1">Highest dedication. Decreases emissions by 4.0% monthly. Adopts major investments like solar energy.</p>
+              <p className="text-slate-655 text-xs mt-1">Highest dedication. Decreases emissions by 4.0% monthly. Adopts major investments like solar energy.</p>
             </button>
           </div>
         </div>
 
         {/* Form Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
-          <div className="flex items-start gap-2 text-slate-500 text-xs max-w-md">
-            <AlertCircle size={15} className="text-amber-500 shrink-0 mt-0.5" />
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-150">
+          <div className="flex items-start gap-2 text-slate-600 text-xs max-w-md">
+            <AlertCircle size={15} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
             <p>Your profile data is kept strictly private and cached only in your local browser sandbox.</p>
           </div>
 
           <button
             id="profile-save-button"
             type="submit"
-            className="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-950 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition flex items-center gap-2 cursor-pointer focus:ring-2 focus:ring-emerald-600 outline-none"
+            aria-label="Save current sustainability preferences to local cache"
+            className="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-950 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition flex items-center gap-2 cursor-pointer focus:ring-2 focus:ring-emerald-600 focus:outline-none"
           >
             {saved ? "Profile Preferences Saved!" : "Save Profile Preferences"}
           </button>

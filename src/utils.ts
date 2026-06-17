@@ -157,7 +157,7 @@ export function calculateImpactScore(
   costEffectiveness: "Low Cost" | "Medium Cost" | "Investment Required"
 ): number {
   const fMultiplier = feasibility === "Easy" ? 1.2 : feasibility === "Medium" ? 1.0 : 0.7;
-  const cMultiplier = costEffectiveness === "Low Cost" ? 1.2 : costEffectiveness === "Medium" ? 1.0 : 0.6;
+  const cMultiplier = costEffectiveness === "Low Cost" ? 1.2 : costEffectiveness === "Medium Cost" ? 1.0 : 0.6;
   return Math.round(carbonReduction * fMultiplier * cMultiplier);
 }
 
